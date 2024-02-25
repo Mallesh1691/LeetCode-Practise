@@ -1,0 +1,93 @@
+//Brute Force
+
+Approach:
+1)Trim to remove leading and trailing spaces
+2)Add additional space in the last
+3)iterate through the string and keep concatening characters to a variable, whenever you encounter any space, add that variable to a stack and initialize that variable again to an empty string.
+4)Now that all words are stored in stack, but in reverse order. Remove elements from the stack and store it to answer varaibles along with a space evertime, till the stack size is 1
+5)When the stack size is 1 , add just that last element to the answer variable(since you don't need to include space for the last word).
+6)Return the answer.
+
+Time Complexity : O(N)
+Space Complexity : O(1)
+
+class Solution {
+    public String reverseWords(String s) {
+        Stack<String> st =  new Stack<String>();
+        String str="";
+        s=s.trim();
+        s=s+" ";
+        for(int i=0;i<s.length();i++){
+            if(s.charAt(i) == ' '){
+                if(str.length()>0){
+                st.push(str);
+                }
+                str="";
+            }
+            else{
+                str+=s.charAt(i);
+            }
+        }
+        String answer="";
+        while(st.size() != 1){
+            answer+=st.peek() +" ";
+            st.pop();
+      //  answer+=st.pop() +" "; // use this line alone instead of above  lines
+        }
+        answer+=st.pop();
+        return answer;
+        
+    }
+}
+
+
+
+//Optimized Approach
+
+Approach:
+1)Trim string to eliminate leading and trailing space , take 2 variables called left=0 and right= string.length()-1.
+2)iterate through the string and concat characters to a temp variable till you encounter a space
+3)There would be a one more variable called answer, Check whether it's empty. it will be empty when you found first space. So store your temp in answer and assign empty string to temp again
+4)Now when you encounter one more space , this time answer will not be empty, this time add your temp + additional space + answer, that way your first stored word is in the last of answer string.
+5)Iterate the same process till left >right.// at this point of time, last word won't be added, but it is stored in temp varaible.
+6) Process the same logic for adding last word. Check whether answer is empty and then add temp + " " + answer. 
+
+Time Complexity : O(N)
+Space Complexity : O(1)
+
+class Solution {
+    public String reverseWords(String s) {
+         s=s.trim();
+        int left=0;
+        int right=s.length()-1;
+        String temp="";
+        String ans="";
+
+        while(left <= right){
+            if(s.charAt(left) != ' ' ){
+                temp += s.charAt(left);
+            }
+            else{
+                if(! ans.equals("")){
+                    if(temp.length()>0){
+                        ans = temp + " " + ans;
+                    }
+                }
+                else{
+                    ans = temp;
+                }
+                temp="";
+            }
+            left++;
+        }
+        //for the last word
+        if(! ans.equals("")){
+             ans = temp + " " + ans;
+        }
+        else{
+             ans = temp;
+         }
+         return ans;
+        
+    }
+}
